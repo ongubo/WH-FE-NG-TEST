@@ -5,6 +5,7 @@
  * * Both [monthly_payment] and [late_payment] should print in the template in currency format : $1,234
  */
 
+import { CommonModule } from "@angular/common";
 import { Component, Input, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
@@ -12,8 +13,18 @@ import { RouterModule } from "@angular/router";
   selector: "ng-app",
   template: `<div>
     <h2>Loan Details</h2>
-    <b>Monthly Payment:</b> {{ monthly_payment || "N/A" }}<br />
-    <b>Late Payment Fee : {{ late_payment || "N/A" }}</b> <br />
+    <b>Monthly Payment:</b>
+    <ng-container *ngIf="monthly_payment; else monthlyelse">
+      {{ monthly_payment | currency }}<br />
+    </ng-container>
+    <ng-template #monthlyelse> N/A </ng-template><br />
+
+    <b>Late Payment Fee : </b>
+    <ng-container *ngIf="late_payment; else lateelse">
+      {{ late_payment | currency }}<br />
+    </ng-container>
+    <ng-template #lateelse> N/A </ng-template>
+    <br />
   </div>`,
 })
 export class Test01Component {
@@ -40,6 +51,7 @@ export class Test01Component {
         component: Test01Component,
       },
     ]),
+    CommonModule,
   ],
   declarations: [Test01Component],
 })
